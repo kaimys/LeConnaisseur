@@ -2,7 +2,25 @@
 header("Content-type: application/json");
 
 $API = "http://tvhackday.api.lab.watchmi.tv";
-$CHANNELS = array(100,104,115,138,139,146,175,194,266,275,276,277,39,40,402,41,42,43,44,453,46,47,471,472,475,48,49,507,51,52,54,544,55,56,57,58,587,589,59,60,610,613,618,64,65,659,66,660,666,694,774,38);
+//$CHANNELS = array(100,104,115,138,139,146,175,194,266,275,276,277,39,40,402,41,42,43,44,453,46,47,471,472,475,48,49,507,51,52,54,544,55,56,57,58,587,589,59,60,610,613,618,64,65,659,66,660,666,694,774,38);
+$CHANNELS = array(71, 40, 58, 694);
+$SUBSCRIBER = 'c16a4004-e5df-4f30-9ba8-f4222f64b98f';
+$PROFILES = array(
+    'sport'         => "c16a4004-e5df-4f30-9ba8-f4222f64b98f_dd677004-e5df-4f30-9ba8-f4222f64b98f_sports_1",
+    'entertainment' => "c16a4004-e5df-4f30-9ba8-f4222f64b98f_dd677004-e5df-4f30-9ba8-f4222f64b98f_entertainment_1",
+    'series'        => "c16a4004-e5df-4f30-9ba8-f4222f64b98f_dd677004-e5df-4f30-9ba8-f4222f64b98f_series_1",
+    'movie'         => "c16a4004-e5df-4f30-9ba8-f4222f64b98f_dd677004-e5df-4f30-9ba8-f4222f64b98f_movie_1",
+    'kids'          => "c16a4004-e5df-4f30-9ba8-f4222f64b98f_dd677004-e5df-4f30-9ba8-f4222f64b98f_kids_1",
+    'various'       => "c16a4004-e5df-4f30-9ba8-f4222f64b98f_dd677004-e5df-4f30-9ba8-f4222f64b98f_VARIOUS_1",
+    'info'          => "c16a4004-e5df-4f30-9ba8-f4222f64b98f_dd677004-e5df-4f30-9ba8-f4222f64b98f_info_1"
+);
+
+date_default_timezone_set('Europe/Berlin');
+
+function format_time($t) {
+    //return date("Y-m-d\\TH:i:sP", $t);
+    return date("Y-m-d\\TH:i:s\\Z", $t-7200);
+}
 
 function watchmi($service, $obj) {
     global $API;
@@ -19,6 +37,38 @@ function watchmi($service, $obj) {
     } else {
         return $url;
     }
+}
+
+function post_rating($profile, $assetId, $rating) {
+    global $API, $PROFILES, $SUBSCRIBER;
+    $url = $API."/profile/".$PROFILES[$profile]."/scorer?errorTolerant=true&recordingSuggestion=false";
+    $data = array(
+        'assetId' => $assetId,
+        'rating' => ($rating - 1.0) / 2.0 - 1.0,
+        'subscriber' => $SUBSCRIBER
+    );
+    //print_r(array($url, $data)); exit();
+    // use key 'http' even if you send the request to https://...
+    $options = array(
+        'http' => array(
+            'method'  => 'POST',
+            'header'  => "Content-type: application/json\r\n",
+            'content' => json_encode($data),
+        ),
+    );
+    $context = stream_context_create($options);
+    return json_decode(file_get_contents($url, false, $context));
+}
+
+function condenseAsset($asset) {
+    return array(
+        'title' => $asset->titles->deu,
+        'start' => $asset->availabilityStartTime,
+        'end' => $asset->availabilityEndTime,
+        'assetId' => $asset->assetId,
+        'sourceId' => $asset->sourceId,
+        'imageURL' => $asset->imageUrl[0]
+    );
 }
 
 switch ($_SERVER["PATH_INFO"]) {
@@ -41,16 +91,17 @@ switch ($_SERVER["PATH_INFO"]) {
             'annotation' => 'full',
             'windowOfAvailabilityType' => 'strictStart',
             'descendingDefaultByTime' => 'true',
-            'windowOfAvailabilityStart' => '2014-09-20T13:00:00Z',
-            'windowOfAvailabilityEnd' => '2014-09-20T15:45:00Z'
+            'windowOfAvailabilityStart' => format_time(time()-7200),
+            'windowOfAvailabilityEnd' => format_time(time()+7200)
         );
+        //print_r($query);exit();
         $response = watchmi("/asset", $query);
         break;
 
-    case "/recommend":
+    case "/recommendForItem":
         $query = array(
             'context' => 'simDefault',
-            'seed' => $_GET["seed"],
+            'seed' => $_GET["item"],
             'adHocContext' => array(
                 'rules' => array(
                     array('then' => array('global' => array(
@@ -63,7 +114,45 @@ switch ($_SERVER["PATH_INFO"]) {
                 )
             ),
         );
-        $response = watchmi("/recommendations", $query);
+        $res = watchmi("/recommendations", $query);
+        $response = array();
+        foreach($res->recommendations as $rec) {
+            $response[] = condenseAsset($rec->asset);
+        }
+        break;
+
+    case "/recommendForUser":
+        $query = array(
+            'context' => 'prefDefault',
+            'subscriber' => $SUBSCRIBER,
+            'profile' => $PROFILES[$_GET['profile']],
+            'adHocContext' => array(
+                'rules' => array(
+                    array('then' => array(
+                        'preferenceEngines' => array( array('name' => 'prefEngine1')),
+                        'global' => array(
+                            'numberOfItems' => 10,
+                            'windowOfAvailabilityStart' => '2014-09-21T10:45:00Z',
+                            'windowOfAvailabilityEnd'   => '2014-09-24T22:10:00Z',
+                            'annotation' => 'full',
+                            'filter' => array('term' => 'sourceId', 'operator' => 'in', 'values' => $CHANNELS),
+                        )
+                    ))
+                )
+            )
+        );
+        $res = watchmi("/recommendations", $query);
+        $response = array();
+        foreach($res->recommendations as $rec) {
+            $response[] = condenseAsset($rec->asset);
+        }
+        break;
+
+    case "/rate":
+        $response = post_rating('movie', floor($_GET['asset']), floor($_GET['rating']));
+        break;
+
+    case "/profiles":
         break;
 
     case "/test":
