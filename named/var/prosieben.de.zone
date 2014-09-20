@@ -1,0 +1,10 @@
+$TTL 3D
+@       IN      SOA     hbbtv.prosieben.de. hostmaster.prosieben.de. (
+                        199802151       ; serial, todays date + todays serial #
+                        8H              ; refresh, seconds
+                        2H              ; retry, seconds
+                        4W              ; expire, seconds
+                        1D )            ; minimum, seconds
+;
+hbbtv          A       192.168.2.1
+www            A       62.138.115.47

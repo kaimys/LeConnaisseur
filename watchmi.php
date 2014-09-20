@@ -56,7 +56,7 @@ switch ($_SERVER["PATH_INFO"]) {
                     array('then' => array('global' => array(
                         'numberOfItems' => 10,
                         'windowOfAvailabilityStart' => '2014-09-21T10:45:00Z',
-                        'windowOfAvailabilityEnd'   => '2014-09-21T02:10:00Z',
+                        'windowOfAvailabilityEnd'   => '2014-09-22T02:10:00Z',
                         'annotation' => 'full',
                         'filter' => array('term' => 'sourceId', 'operator' => 'in', 'values' => $CHANNELS),
                     )))
