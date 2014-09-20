@@ -12,7 +12,7 @@ body{
 	color:#F0F0F0;
 	font-size:18px;
 	overflow: hidden;
-	font-family: 'Carrois Gothic', sans-serif; 
+	/* font-family: 'Carrois Gothic', sans-serif;  */
 	/* cursor: none; */
 }
 
@@ -27,33 +27,66 @@ body{
     z-index:1;
 }
 
-#rating{
+
+#mustache{
     position:absolute;
-    right:30px;
-    bottom:50px;
-    height:50px;
+    right:60px;
+    bottom:0px;
+
+    width:128px;
+    height:128px;
     z-index:1;
-    padding:5px;
-    background-color:#EDEDED;
-    padding-left:0px;
+    text-align: center;
+background-color:transparent; 
 }
 
 
+#rating{
+    visibility:hidden;
+    position:absolute;
+    right:60px;
+    bottom:30px;
+    height:50px;
+    z-index:1;
+    padding:5px;
+    background-color:transparent; 
+    padding-left:0px;
+}
+.ratingBtn_visited{
+
+}
+
 .ratingBtn{
     
-    background-color:#999999;
-    color:#FFFFFF;
+   /* background-color:#999999; */
 
-    width:30px;
-    height:30px;
+    width:50px;
+    height:50px;
     float:left;
+    margin-left:5px;
+    margin-bottom:5px;
 
-    line-height:33px;
-    font-weight:bold;
+    padding-top:5px;
     text-align:center;
     overflow:hidden;
 }
 
+
+#merci{
+    position: absolute;
+    right:60px;
+    bottom:30px;
+    font-weight:bold;
+    
+    background-color:#111111;
+    color:#C4113D;
+    padding:5px;
+    padding-left:15px;
+    padding-right:15px;
+    font-size:30px;
+    visibility: hidden;
+    text-align:center;
+}
 
 
 .btn{
@@ -420,5 +453,5 @@ body{
 	clear: left;
 	color:#FF0000;
 	
-	background-color:#FFFFFF;
+	background-color:#111111;
 }

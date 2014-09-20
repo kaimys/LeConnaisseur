@@ -17,8 +17,8 @@
                     currentMetadata.maxItemsPerPage=5;
                     currentMetadata.maxLineSize=5;
                     currentMetadata.page=0;
-                    currentMetadata.currentId=0;
-                    currentMetadata.clickedId=0;
+                    currentMetadata.currentId=2;
+                    currentMetadata.clickedId=2;
                     currentMetadata.scroll="horizontal";
                     currentMetadata.scrollFunction = arguments.callee.name;
 		}
@@ -29,7 +29,7 @@
                 area.setNexAreas({up:null, down:null, right:null, left:null});
                 
                 
-		area.setCssClasses({normal:"ratingBtn", active:"btn_active", visited:"btn_visited", mouseOver:"btn_mouseOver"});
+		area.setCssClasses({normal:"ratingBtn", active:"btn_active", visited:"ratingBtn_visited", mouseOver:"btn_mouseOver"});
 
                 /*
 		var logo = document.createElement("div");
@@ -52,7 +52,7 @@
                                 if(gyroscope){
                                         button.addGyroscopeMode();
                                 }
-                               button.setAction("empty("+i+")");
+                               button.setAction("rate("+i+")");
 
                             area.addButton(button);
 			}
@@ -60,6 +60,8 @@
 		
             NAVIGATOR.addArea(area);
             setInactive(areaName);
+            
+            
 	}
         
 

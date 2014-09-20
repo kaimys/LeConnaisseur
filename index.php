@@ -48,6 +48,7 @@ if($showPointer==true){
 	/* <![CDATA[ */
         var cehtml  = true;
             <?php if ($hbbtv==true) {?>
+        var channel = <?php echo $_GET['ch']; ?>;
         var hbbtv = true;
             <?php }else{ ?>
         var hbbtv = false;       
@@ -70,6 +71,8 @@ if($showPointer==true){
         
 
     <div id="rating"></div>
+    <div id="mustache"><img src="img/mustache.png" border="0"/></div>
+    <div id="merci">Merci !<br/><img src="img/logo.png" border="0"/></div>
         
         
         

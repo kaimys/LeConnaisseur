@@ -3,6 +3,9 @@
        // var cehtml            see index.html or .php;
         // var hbbtv            see index.html or .php;
 	//var gyroscope           = false;
+        
+        //var                 channel = "";
+
 	var NAVIGATOR;
 	var myVideo; 
 	
@@ -261,3 +264,26 @@
             MEN.closeApp();
 
         }
+
+
+           function goYellow(){
+                //case VK_YELLOW:
+               //e.preventDefault();
+                //window.location.reload(true);
+                window.location.href = window.location.href.split('?')[0] + "?v=" + Math.round(Math.random()*1000000);
+           }
+           
+           
+           
+
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  } 
+ // alert('Query Variable ' + variable + ' not found');
+}

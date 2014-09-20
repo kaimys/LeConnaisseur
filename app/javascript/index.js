@@ -7,12 +7,9 @@
                 
 		myVideo = document.getElementById("videoObj");
                 
-                
-               // if(filename=="genre.php"){
-                    
-                //}else{
-                //    addBigFeatureMenu();
-               // }
+                //var url= window.location.toString();
+                //channel = getQueryVariable("ch");
+                trace(channel);
                 
                 addRating();
                // addGrid();
@@ -30,7 +27,55 @@
                 //initGyroscope();
 
 	}
+        
+        
+        
+        
+        function rate(id){
+            var currentArea = NAVIGATOR.getCurrentAreaName();
+           
+            if(document.getElementById(currentArea).style.visibility==""){
+                
+                NAVIGATOR.setNextAreaByName("rating");
+                NAVIGATOR.getCurrentArea().metadata.clickedId = 2;
+                NAVIGATOR.getCurrentArea().metadata.currentId=2;
+                setActive();
+                        
+                document.getElementById("mustache").style.visibility="hidden";
+                document.getElementById(currentArea).style.visibility="visible";
+                
+                setActive();
+                updateStarVisibility();
+            }else{
+                //blockNavigation(true);
+                blocked=true;
+                openMerciLayer();
+            }
+        }
 	
+        function openMerciLayer(){
+            document.getElementById("rating").style.visibility="hidden";
+            document.getElementById("merci").style.visibility="visible";
+            setTimeout("hideAll()",3000);
+        }
+        
+        
+        function hideAll(){
+            document.getElementById("merci").style.visibility="hidden";
+        }
+        
+        function updateStarVisibility(){
+    
+    
+            var currentId =  NAVIGATOR.getCurrentArea().metadata.currentId;
+            for(var i=0;i<5;i++){
+               if(i<=currentId){
+                   document.getElementById("rating_"+i).style.opacity="1";
+               }else{
+                   document.getElementById("rating_"+i).style.opacity="0.5";
+               }
+            }     
+        }
 
 	function refresh(type){
             
@@ -206,6 +251,8 @@
 
 	function checkExceptionAfter(direction){
             
+            var currentArea= NAVIGATOR.getCurrentAreaName();
+
             /*
 		var name            = NAVIGATOR.getCurrentAreaName();
 		//var id              = NAVIGATOR.getCurrentArea().metadata.currentId;
@@ -258,6 +305,10 @@
                 break;
             }
             */
+           
+            if( currentArea == "rating"){
+                 updateStarVisibility();
+            }
 	}
 	
 

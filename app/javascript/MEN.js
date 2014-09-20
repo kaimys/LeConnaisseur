@@ -80,11 +80,12 @@
 					case VK_GREEN:
 						goGreen();  
 					break;
-					
-					case VK_YELLOW:
-						goYellow();  
-					break;
 					*/
+					case VK_YELLOW:
+						goYellow(); 
+                    
+					break;
+					
 					case VK_RED:
 						goRed();  
 					break;
