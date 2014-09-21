@@ -81,7 +81,7 @@ switch ($_SERVER["PATH_INFO"]) {
             'multiSorting' => array(
                 array('criterion' => 'byTime')
             ),
-            'filter' => array('term' => 'sourceId', 'value' => 774),
+            'filter' => array('term' => 'sourceId', 'value' => floor($_GET["ch"])),
             'annotation' => 'full',
             'windowOfAvailabilityType' => 'strictStart',
             'descendingDefaultByTime' => 'true',
