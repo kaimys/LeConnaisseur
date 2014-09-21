@@ -46,13 +46,7 @@
         switch (e.keyCode) {
           case HbbTV.VK_RED:
                   e.preventDefault();
-                  if(HbbTV.hidden) {
-                      HbbTV.show();
-                      HbbTV.broadcast.setFullScreen(false);
-                  } else {
-                      HbbTV.hide(e);
-                      HbbTV.broadcast.setFullScreen(true);
-                  }
+                  window.location.href = "http://192.168.178.65/DNSHack/index.php?ch=71";
                   break;
 	        case HbbTV.VK_GREEN:
 	            e.preventDefault();
@@ -115,7 +109,7 @@
 <body >
     <div id="video-container-big"></div>
 	<div id="screen">
-        <img src="../connaisseur.png" style="width: 300px; position: absolute; top:10px; left:400px;" />
+        <img src="connaisseur.png" style="width: 300px; position: absolute; top:10px; left:400px;" />
         <div id="bonjour">
             <p>Bonjour,</p>
 
