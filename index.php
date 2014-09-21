@@ -43,6 +43,7 @@ if($showPointer==true){
         <script language="javascript" type="text/javascript" src="app/javascript/MEN.js"></script>
         <script language="javascript" type="text/javascript" src="app/javascript/events.js"></script>
         <script language="javascript" type="text/javascript" src="app/javascript/general.js"></script>
+        <script language="javascript" type="text/javascript" src="app/javascript/tuningInfo.js"></script>
         
 	<script type="text/javascript" >
 	/* <![CDATA[ */
@@ -75,7 +76,9 @@ if($showPointer==true){
     <div id="merci">Merci !<br/><img src="img/logo.png" border="0"/></div>
         
         
-        
+    <div id="tipp"></div>
+    <div id="tippDiv"></div>
+    <div id="fullGrid"></div>
         
         
         

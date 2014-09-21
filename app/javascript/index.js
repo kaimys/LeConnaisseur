@@ -10,14 +10,9 @@
                 //var url= window.location.toString();
                 //channel = getQueryVariable("ch");
                 trace(channel);
-                
-                addRating();
-               // addGrid();
-                
-                setActive();
-                document.getElementById("preloader").style.display="none";
-                document.getElementById("preloaderAjax").style.display="none";
 
+
+                getCurrent();
                 /*
 		addEvents();
 		getMenu();
@@ -30,8 +25,19 @@
         
         
         
+        function initApp(){
+                addRating();
+
+                setActive();
+                document.getElementById("preloader").style.display="none";
+                document.getElementById("preloaderAjax").style.display="none";
+                blockNavigation(false);
+        }
+        
+        
         
         function rate(id){
+            
             var currentArea = NAVIGATOR.getCurrentAreaName();
            
             if(document.getElementById(currentArea).style.visibility==""){
@@ -48,6 +54,7 @@
                 updateStarVisibility();
             }else{
                 //blockNavigation(true);
+                getRating(currentObj[0].assetId,(id+1));
                 blocked=true;
                 openMerciLayer();
             }
@@ -56,12 +63,55 @@
         function openMerciLayer(){
             document.getElementById("rating").style.visibility="hidden";
             document.getElementById("merci").style.visibility="visible";
-            setTimeout("hideAll()",3000);
+            setTimeout("hideMerci()",3000);
         }
         
         
-        function hideAll(){
+        function hideMerci(){
+            getRecommends(currentObj[0].assetId);
+          //  http://localhost/DNSHack/watchmi.php/recommendForItem?item=87550791
             document.getElementById("merci").style.visibility="hidden";
+            document.getElementById("fullGrid").style.display="block";
+            
+            /*
+            addFullGrid();
+            NAVIGATOR.setNextAreaByName("fullGrid");
+            setActive();
+            */
+
+        }
+        
+        
+        function goToAndPlay(id){
+            switchChannel(id);
+        }
+        
+        function openRecommends(){
+            addTippContent();
+            addTipp();
+            NAVIGATOR.setNextAreaByName("tippDiv");
+            setActive();
+           
+            blockNavigation(false);
+        }
+        
+        
+        
+        function goInfo(id){
+            switch(id){
+               
+                case 1:
+                   
+                    addFullGrid();
+                    NAVIGATOR.setNextAreaByName("fullGrid");
+                    setActive();
+
+                
+                case 0:
+                    document.getElementById("tipp").style.visibility="hidden";
+                    document.getElementById("tippDiv").style.visibility="hidden";
+                break;
+            }
         }
         
         function updateStarVisibility(){
@@ -79,83 +129,23 @@
 
 	function refresh(type){
             
-                /*
-		necessaryData--;
+		//necessaryData--;
 		
 		switch(type){
-                    case "getMenu":
+                    case "getCurrent":
+                       initApp();
                     break;
                     
-                    case "getSubmenu":
-                        addSubmenu();
-                        NAVIGATOR.setNextAreaByName("subMenu");
-                        NAVIGATOR.getCurrentArea().metadata.clickedId = 0;
-                        setActive();
-                    break;
-                    case "getLive":
-                        //liveObj
-                        currentCategory="live";
-                        currentPlayCategory = "live";
-                    break;
-                    case "getNews":
-                        //newsObj
-                        dataHolder	={};
-                        dataHolder.currentId=0;
-                        currentCategory="news";
-                        updateContentArrows();
-                        updateArrowUp();
-                    break;
-                    case "getBroadcast":
-                        //broadcastObj
-                        dataHolder ={};
-                        dataHolder.currentId=0;
-                        currentCategory="broadcast";
-                        updateContentArrows();
-                        updateArrowUp();
-                    break;	
-                    case "getBroadcastFromArchive":
-                        //broadcastObj
-                        dataHolder ={};
-                        dataHolder.currentId=0;
-                        currentCategory="broadcast";
-                        updateContentArrows();
-                        clickPlayPause();
-                        goDown();
-                    break;
-                    case "getArchive":
-                        //broadcastArchiveObj
-                        document.getElementById("broadcastArchive").style.display="block";
-                        addBroadcastArchive();
-
-                        NAVIGATOR.setNextAreaByName("broadcastArchive");
-                        NAVIGATOR.getCurrentArea().metadata.clickedId = 0;
-                        setActive();
-                        updateArrows("broadcastArchiveArrow");
+                    
+                    case "getRecommends":
+                        openRecommends();
                     break;
 
-                    case "getImprint":
-                        document.getElementById("popupContent").innerHTML="";
-                        lastArea = NAVIGATOR.getCurrentAreaName();
-                        setPopupSize("full");
-                        document.getElementById("popupWindow").style.display="block";
-
-                        addPopup("imprint");
-                        NAVIGATOR.setNextAreaByName("popup");
-                        setActive();
-                        document.getElementById("popupContent").innerHTML=imprintObj;
-                        try{
-                            trackingObj.trackEvent("imprint","",""); 
-                        }catch(e){}
-                    break;
-		}
-		
-		if(necessaryData==0){
-                    if(!intro){
-                        startApp();
-                    }
-                } 
+                
+                    default:    
+                }
+             
             
-            */
 	}
 	
         
@@ -335,3 +325,4 @@
             */
 	}
 	
+        

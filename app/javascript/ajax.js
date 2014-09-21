@@ -1,56 +1,33 @@
-	var ajaxURL           = "../../API/ptv/index.php";
+	var ajaxURL           = "http://localhost/DNSHack/watchmi.php";
 	
-	function getMenu(){
+	function getCurrent(){
 		blockNavigation(true);
 		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getMenu", 0, 0, "", comboBox);
+		doHttpRequest(ajaxURL+'/nownext?ts='+Math.random(1000000)+"&ch="+channel, "getCurrent", 0, 0, "", comboBox);
+                ///nownext?ch=774
 	}
 	
-	function getSubmenu(url){
-		blockNavigation(true);
+        
+        function getRating(id,rate){
+            //alert(id+" "+rate);
+            var comboBox = new Object();
+           doHttpRequest(ajaxURL+'/rate?ts='+Math.random(1000000)+"&assetId="+id+"&rating"+rate+"&profile=movie", "getRating", 0, 0, "", comboBox);
+           
+        }
+	
+        
+        
+        function getRecommends(assetId){
+                blockNavigation(true);
 		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getSubmenu", 0, 0, url, comboBox);
-	}
-	
-	function getLive(){
-		blockNavigation(true);
-		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getLive", 0, 0, "", comboBox);
-	}
-	
-	function getNews(url){
-		blockNavigation(true);
-		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getNews", 0, 0, url, comboBox);
-	}
-	
-	function getBroadcast(url){
-		blockNavigation(true);
-		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getBroadcast", 0, 0, url, comboBox);
-	}
-	
-	function getBroadcastFromArchive(url){
-		blockNavigation(true);
-		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getBroadcastFromArchive", 0, 0, url, comboBox);
-	}
-	
-	function getArchive(type){
-		blockNavigation(true);;
-		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getArchive", 0, 0, type, comboBox);
-	}
-	
-	function getImprint(){
-		blockNavigation(true);
-		var comboBox = new Object();
-		doHttpRequest(ajaxURL+'?ts='+Math.random(1000000), "getImprint", 0, 0, "", comboBox);
-	}
-	
-	
-	
+		doHttpRequest(ajaxURL+'/recommendForItem?ts='+Math.random(1000000)+"&item="+assetId, "getRecommends", 0, 0, "", comboBox);
+            //http://localhost/DNSHack/watchmi.php/recommendForItem?item=87550791
+            
+        }
+        
+        
 	function doHttpRequest(url, type, count, from, id, __unused__) {
+            
 	    var request = null;
 	
 	    if (window.XMLHttpRequest)
@@ -60,12 +37,13 @@
 	      request.onreadystatechange = function(){
 	          if(this.readyState == 4)  {
 	            if(this.status == 200) {
+             
 	              populate(this.responseText,type);  
 	            }
 	          }
 	      };
-	      
-	      request.open('GET', url+"&type="+type+"&count="+count+"&from="+from+"&id="+id , true);
+              
+	      request.open('GET', url , true);
 	      request.send();
 	    }
 	 };
@@ -73,53 +51,32 @@
 	 
 	 
 	function populate(responseText,type){
+            
+           // alert(type);
     	try {
             
-            
     		 switch(type){
-    		 	
-    		 	case "getImprint":
-    		 		eval("imprintObj="+responseText+";");
-				blockNavigation(false);
+    		 
+    		 	case "getCurrent":	
+                            eval("currentObj="+responseText+";");
+                            //blockNavigation(false);
+                                
     		 	break;
-				
-    		 	case "getMenu":
-    		 		eval("menuObj="+responseText+";");
-				blockNavigation(false);
+                        
+                        case "getRecommends":	
+                            eval("recommendsObj="+responseText+";");
+                            //blockNavigation(false);
+                            
+                                
     		 	break;
-				
-    		 	case "getSubmenu":
-    		 		eval("submenuObj="+responseText+";");
-				blockNavigation(false);
-    		 	break;
-    		 	
-    		 	case "getLive":
-    		 		eval("liveObj="+responseText+";");
-				blockNavigation(false);
-    		 	break;
-				
-    		 	case "getNews":
-    		 		eval("newsObj="+responseText+";");
-				blockNavigation(false);
-    		 	break;
-				
-    		 	case "getBroadcast":
-    		 		eval("broadcastObj="+responseText+";");
-				blockNavigation(false);
-    		 	break;
-				
-    		 	case "getBroadcastFromArchive":
-    		 		eval("broadcastObj="+responseText+";");
-				blockNavigation(false);
-    		 	break;
-				
-                        case "getArchive":
-                                eval("broadcastArchiveObj="+responseText+";");
-                                blockNavigation(false);
+                        
+                        case "getRating":
+                            //alert("gut geraten");
                         break;
+                        
+                    default:
       		}
       		
-                
                 
     		refresh(type);
 			

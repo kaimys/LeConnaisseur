@@ -6,6 +6,10 @@
         
         //var                 channel = "";
 
+        var currentObj;
+        var recommendsObj;
+
+
 	var NAVIGATOR;
 	var myVideo; 
 	

@@ -17,6 +17,8 @@ body{
 }
 
 
+
+
 #menu{
     position:absolute;
     right:60px;
@@ -191,13 +193,14 @@ background-color:transparent;
     z-index:1;
 }
 .gridItem{
-    width:232px;
+    width:228px;
     height:280px;
-    margin-right:1px;
-    margin-bottom:1px;
+    margin-right:5px;
+    margin-bottom:5px;
     background-color:#CCCCCC;
     float:left;
     overflow: hidden;
+    
    /* background-image: url(../../test.jpg); */
 }
 .btn_gridItemVisited{
@@ -209,16 +212,16 @@ background-color:transparent;
 .gridItemText{
     padding:5px;
     margin:5px;
-    margin-top:175px;
+    margin-top:5px;
+
+    width:208px;
+    height:260px;
     
-    width:212px;
-    height:90px;
-    
-    color:#111111;
+    color:#ffffff;
     font-weight: bold;
-    font-size: 18px;
-    background-color:#FFFFFF;
-    opacity: 0.8;
+    font-size: 22px;
+    background-color:#000000;
+    overflow: hidden;
 }
 
 
@@ -276,7 +279,6 @@ background-color:transparent;
     top:110px;
     width: 1180px;
     height:560px;
-     background-color:#EDEDED; 
 
     z-index:1;
     display:none;
@@ -296,11 +298,42 @@ background-color:transparent;
     display:none;
 }
 
-#fullInfoContainer{
+#tipp{
     position:absolute;
-    top:360px;
-    width:500px;
+    bottom:30px;
+    right:375px;
 }
+
+
+.tippContent{
+    
+    background-color:#999999;
+    color:#FFFFFF;
+
+    width:300px;
+
+
+    float:left;
+    margin-left:5px;
+    margin-bottom:5px;
+    padding:5px;
+
+    line-height:33px;
+    font-weight:bold;
+    text-align:left;
+    overflow:hidden;
+}
+
+#tippDiv{
+    
+    position:absolute;
+    right:60px;
+    bottom:30px;
+    font-size: 22px;
+}
+
+
+
 
 #fullInfoImage{
     position:absolute;
