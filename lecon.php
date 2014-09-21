@@ -2,13 +2,16 @@
 header("Content-type: application/json");
 $API = "http://tvhackday.api.lab.watchmi.tv";
 
+define("TIMESPAN", 60*60*2);
+
+$CHANNELS = array(71, 40, 58, 694, 37, 64, 589);
+
 function now () {
-	return date("Y-m-d")."T".date("H:i:s", time()-60*60*2);
+	return than(0);
 }
 
 function than ($delay) {
-	$offset=time()-60*60*2+$delay;
-	return date("Y-m-d", $offset)."T".date("H:i:s", $offset);
+	return date("Y-m-d\\TH:i:s", time() + $delay)."+02:00";
 }
 
 function watchmi($service, $obj) {
@@ -18,7 +21,7 @@ function watchmi($service, $obj) {
         if(gettype($value) == "array") {
             $url .= $key."=".urlencode(json_encode($value))."&";
         } else {
-            $url .= $key."=".$value."&";
+            $url .= $key."=".urlencode($value)."&";
         }
     }
     if(true) {
@@ -38,22 +41,15 @@ switch ($_GET["q"]) {
         break;
 
     case "nownext":
-        $query = array(
-            'numberOfItems' => 10,
-            'sorting' => 'multi',
-            'multiSorting' => array(
-                array('criterion' => 'byTime')
-            ),
-            'filter' => array('term' => 'sourceId', 'value' => $_GET["ch"]),
-            'annotation' => 'full',
-            'windowOfAvailabilityType' => 'strictStart',
-            'descendingDefaultByTime' => 'true',
-            'windowOfAvailabilityStart' => now(),
-            'windowOfAvailabilityEnd' => than(60*60*2)
-        );
-        $response = watchmi("/asset", $query);
-        $response = filter($response);
+    	$response = json_encode(nowNext($_GET["ch"]));
         break;
+        
+    case "epg":
+        foreach ($CHANNELS as $channel) {
+        	$array[] = nowNext($channel);
+        }
+        $response = json_encode($array);
+    	break;
 
     case "test":
         $arr = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
@@ -61,24 +57,47 @@ switch ($_GET["q"]) {
         break;
 }
 
+function nowNext ($channel) {
+	$query = array(
+			'numberOfItems' => 10,
+			'sorting' => 'multi',
+			'multiSorting' => array(
+					array('criterion' => 'byTime')
+			),
+			'filter' => array('term' => 'sourceId', 'value' => $channel),
+			'annotation' => 'full',
+			'windowOfAvailabilityType' => 'strictStart',
+			'descendingDefaultByTime' => 'true',
+			'windowOfAvailabilityStart' => now(),
+			'windowOfAvailabilityEnd' => than(TIMESPAN)
+	);
+	$response = watchmi("/asset", $query);
+	return filter($response);
+}
+
 function filter ($jsonString) {
-	$response = json_decode($jsonString);
+	$input = json_decode($jsonString);
 	
-	foreach ($response as $elem) {
+	foreach ($input as $elem) {
 		$elem = array(
 				"title" => $elem->asset->titles->deu,
+				"start" => $elem->asset->availabilityStartTime,
+				"end" => $elem->asset->availabilityEndTime,
 				"assetId" => $elem->asset->assetId,
 				"sourceId" => $elem->asset->sourceId,
+				"sourceName" => $elem->asset->sourceNames->long->deu,
 				"imageURL" => $elem->asset->imageUrl[0]);
-		$array[] = $elem;
+		$output[] = $elem;
 	}
 	
-	$response = json_encode($array);
+	if (!isset($output)) {
+		$output = array();
+	}
 	
-	if(false) {
-		return $response;
+	if(true) {
+		return $output;
 	} else {
-		return $jsonString;
+		return $input;
 	}
 	
 }
