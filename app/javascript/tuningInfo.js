@@ -43,20 +43,14 @@ var tuningInfo = {
 function switchChannel(t) {
 	if (vidObj) {
 		try {
-			c = vidObj.getChannelConfig().channelList
-					.getChannelByTriplet(t.onid, t.tsid, t.sid);
-		} catch (e) {
-			// TODO log error
-		}
-		try {
 			c = vidObj.createChannelObject(Channel.ID_DVB_C || 0,
 					t.onid, t.tsid, t.sid);
+			if (c) {
+				vidObj.setChannel(c, true);
+				return c;
+			}
 		} catch (e) {
 			// TODO log error
-		}
-		if (c) {
-			vidObj.setChannel(c, true);
-			return c;
 		}
 	}
 }
