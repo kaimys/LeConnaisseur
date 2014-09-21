@@ -18,8 +18,8 @@ $PROFILES = array(
 date_default_timezone_set('Europe/Berlin');
 
 function format_time($t) {
-    //return date("Y-m-d\\TH:i:sP", $t);
-    return date("Y-m-d\\TH:i:s\\Z", $t-7200);
+    return date("Y-m-d\\TH:i:sP", $t);
+    //return date("Y-m-d\\TH:i:s\\Z", $t-7200);
 }
 
 function watchmi($service, $obj) {
@@ -29,7 +29,7 @@ function watchmi($service, $obj) {
         if(gettype($value) == "array") {
             $url .= $key."=".urlencode(json_encode($value))."&";
         } else {
-            $url .= $key."=".$value."&";
+            $url .= $key."=".urlencode($value)."&";
         }
     }
     if(true) {
@@ -104,14 +104,15 @@ switch ($_SERVER["PATH_INFO"]) {
                 'rules' => array(
                     array('then' => array('global' => array(
                         'numberOfItems' => 10,
-                        'windowOfAvailabilityStart' => '2014-09-21T10:45:00Z',
-                        'windowOfAvailabilityEnd'   => '2014-09-22T02:10:00Z',
+                        'windowOfAvailabilityStart' => format_time(time()),
+                        'windowOfAvailabilityEnd'   => format_time(time()+7200),
                         'annotation' => 'full',
                         'filter' => array('term' => 'sourceId', 'operator' => 'in', 'values' => $CHANNELS),
                     )))
                 )
             ),
         );
+        //print_r($query);exit();
         $res = watchmi("/recommendations", $query);
         $response = array();
         foreach($res->recommendations as $rec) {
@@ -130,8 +131,8 @@ switch ($_SERVER["PATH_INFO"]) {
                         'preferenceEngines' => array( array('name' => 'prefEngine1')),
                         'global' => array(
                             'numberOfItems' => 10,
-                            'windowOfAvailabilityStart' => '2014-09-21T10:45:00Z',
-                            'windowOfAvailabilityEnd'   => '2014-09-24T22:10:00Z',
+                            'windowOfAvailabilityStart' => format_time(time()),
+                            'windowOfAvailabilityEnd'   => format_time(time()+3600*12),
                             'annotation' => 'full',
                             'filter' => array('term' => 'sourceId', 'operator' => 'in', 'values' => $CHANNELS),
                         )
@@ -166,7 +167,7 @@ switch ($_SERVER["PATH_INFO"]) {
         $data = array(
             'template' => "dd677004-e5df-4f30-9ba8-f4222f64b98f"
         );
-        $response = array($url, $data); break;
+        //$response = array($url, $data); break;
         $response = post_watchmi($url, $data);
         break;
 
