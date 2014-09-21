@@ -105,7 +105,7 @@ switch ($_SERVER["PATH_INFO"]) {
             'adHocContext' => array(
                 'rules' => array(
                     array('then' => array('global' => array(
-                        'numberOfItems' => 10,
+                        'numberOfItems' => 17,
                         'windowOfAvailabilityStart' => format_time(time()),
                         'windowOfAvailabilityEnd'   => format_time(time()+7200),
                         'annotation' => 'full',
