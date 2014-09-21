@@ -1,6 +1,6 @@
-$ORIGIN prosieben.de.
+$ORIGIN kabeleins.de.
 $TTL 1H
-@       IN      SOA     ns.prosieben.de. hostmaster.prosieben.de. (
+@       IN      SOA     ns.kabeleins.de. hostmaster.kabeleins.de. (
                         199802151       ; serial, todays date + todays serial #
                         8H              ; refresh, seconds
                         2H              ; retry, seconds
