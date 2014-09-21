@@ -1,7 +1,7 @@
 Le Connaisseur
 ==============
 
-![Le Connaisseur][conaisseur.png]
+![Le Connaisseur](conaisseur.png)
 
 EPG Recommendations based on viewer behavior using Watchmi API.
 
