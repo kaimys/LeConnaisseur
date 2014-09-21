@@ -39,15 +39,9 @@ function watchmi($service, $obj) {
     }
 }
 
-function post_rating($profile, $assetId, $rating) {
-    global $API, $PROFILES, $SUBSCRIBER;
-    $url = $API."/profile/".$PROFILES[$profile]."/scorer?errorTolerant=true&recordingSuggestion=false";
-    $data = array(
-        'assetId' => $assetId,
-        'rating' => ($rating - 1.0) / 2.0 - 1.0,
-        'subscriber' => $SUBSCRIBER
-    );
-    //print_r(array($url, $data)); exit();
+function post_watchmi($service, $data) {
+    global $API;
+    $url = $API.$service;
     // use key 'http' even if you send the request to https://...
     $options = array(
         'http' => array(
@@ -95,7 +89,11 @@ switch ($_SERVER["PATH_INFO"]) {
             'windowOfAvailabilityEnd' => format_time(time()+7200)
         );
         //print_r($query);exit();
-        $response = watchmi("/asset", $query);
+        $res = watchmi("/asset", $query);
+        $response = array();
+        foreach($res as $rec) {
+            $response[] = condenseAsset($rec->asset);
+        }
         break;
 
     case "/recommendForItem":
@@ -149,10 +147,27 @@ switch ($_SERVER["PATH_INFO"]) {
         break;
 
     case "/rate":
-        $response = post_rating('movie', floor($_GET['asset']), floor($_GET['rating']));
+        // watchmi.php/rate?asset=86336205&rating=1&profile=various
+        $url = "/profile/".$PROFILES[$_GET['profile']]."/scorer?errorTolerant=true&recordingSuggestion=false";
+        $data = array(
+            'assetId' => floor($_GET['asset']),
+            'rating' => (floor($_GET['rating']) - 1.0) / 2.0 - 1.0,
+            'subscriber' => $SUBSCRIBER
+        );
+        //$response = array($url, $data); break;
+        $response = post_watchmi($url, $data);
         break;
 
-    case "/profiles":
+    case "/createUser":
+        $newUser = md5(rand());
+        $newUser = "ff617004-c5df-4f30-9ba8-f4222f64b98f";
+        $newUser = "ff611029-c5df-4f30-9ba8-f8733f64b98f";
+        $url = "/subscriber/".$newUser;
+        $data = array(
+            'template' => "dd677004-e5df-4f30-9ba8-f4222f64b98f"
+        );
+        $response = array($url, $data); break;
+        $response = post_watchmi($url, $data);
         break;
 
     case "/test":
