@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//HbbTV//1.1.1//EN" "http://www.hbbtv.org/dtd/HbbTV-1.1.1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+  <title>HbbTV StreamEvent Tester</title>
+  <meta http-equiv="content-type" content="Content-Type: application/vnd.hbbtv.xhtml+xml; charset=UTF-8" />
+  <link rel="stylesheet" href="css/hbbtv-base.css" type="text/css"/>
+  <!-- Please use the channel specific CSS: hbbtv-p7.css, hbbtv-s1.css or hbbtv-k1.css -->
+  <link rel="stylesheet" href="css/hbbtv-p7.css" type="text/css"/>
+
+  <style type="text/css">
+
+    body {
+        background: #ffffff;
+    }
+
+    #log {
+      position: absolute;
+      font-size: 12px;
+      left: 190px;
+      top: 200px;
+      width: 550px;
+    }
+
+    #debug {
+      left: 250px;
+      width: 550px;
+    }
+
+    #bonjour {
+        position: absolute;
+        left: 40px;
+        top: 130px;
+        width: 1100px;
+        font-size: 24px;
+    }
+
+    </style>
+
+  <script type="text/javascript" src="js/hbbtv-base.js?332"></script>
+  <script type="text/javascript">
+  /* <![CDATA[ */
+  (function() {
+
+	  document.addEventListener("keydown", function(e) {
+        switch (e.keyCode) {
+          case HbbTV.VK_RED:
+                  e.preventDefault();
+                  if(HbbTV.hidden) {
+                      HbbTV.show();
+                      HbbTV.broadcast.setFullScreen(false);
+                  } else {
+                      HbbTV.hide(e);
+                      HbbTV.broadcast.setFullScreen(true);
+                  }
+                  break;
+	        case HbbTV.VK_GREEN:
+	            e.preventDefault();
+	            window.location.href = HbbTV.startBarUrl;
+	            break;
+	        case HbbTV.VK_YELLOW:
+                e.preventDefault();
+                window.location.href = window.location.href.split('?')[0] + "?v=" + Math.round(Math.random()*1000000);
+                break;
+          case HbbTV.VK_BLUE:
+              e.preventDefault();
+              HbbTV.log('Start debugging');
+              HbbTV.remoteDebug();
+              break;
+          case HbbTV.VK_BACK:
+              e.preventDefault();
+              history.back();
+              break;
+          case HbbTV.VK_UP:
+              e.preventDefault();
+              channel_nav(-1);
+              break;
+          case HbbTV.VK_DOWN:
+              e.preventDefault();
+              channel_nav(1);
+              break;
+          case HbbTV.VK_ENTER:
+              e.preventDefault();
+              channels[channel_selected].act = ! channels[channel_selected].act;
+              if(channels[channel_selected].act) {
+                add_listener();
+                channels[channel_selected].elem.className = 'selected';
+              } else {
+                remove_listener();
+                channels[channel_selected].elem.className = 'hilite';
+              }
+              break;
+        }
+	 }, false);
+
+	window.addEventListener('load', function(e) {
+	    // Please select the right channel setup: P7, S1 or K1
+      HbbTV.debug = false;
+      HbbTV.debugLayerDuration = 5000;
+	  HbbTV.init('P7');
+	  //HbbTV.startBroadcast('video-container-small', 'video');
+      //HbbTV.broadcast.bindToCurrentChannel();
+
+    }, false);
+
+    window.addEventListener('unload', function() {
+      HbbTV.broadcast.setFullScreen(true);
+    }, false);
+
+  })();
+
+  /* ]]> */
+  </script>
+</head>
+<body >
+    <div id="video-container-big"></div>
+	<div id="screen">
+        <img src="../connaisseur.png" style="width: 300px; position: absolute; top:10px; left:400px;" />
+        <div id="bonjour">
+            <p>Bonjour,</p>
+
+            <p>isch freue misch Sie kennen zu lernen.  Damit Sie in Zukunft immer die besten Fernsehsendungen sehen
+                können, möchte isch Ihnen meine Dienste anbieten. Damit isch genuau weiß was Ihnen gefällt können sie
+                am Ende jeder Sendung ein Wertung abgeben. Isch werde auch immer beobachten welche Sendungen sie sich
+                ansehen und kann Ihnen mit diesem Wissen die besten Sendungen im Fernsehen empfehlen.
+                Isch wünsche Ihnen gute Unterhaltung.</p>
+
+            <p>Damit Sie Ihre Nutzerdaten nischt verlieren empfehle isch Ihnen sich mit Ihrem Facebook, Twitter oder
+               Google+ Account zu verbinden. Gehen Sie dazu auf <b>www.leConnaisseur.de/Y4T67H</b> oder verwenden Sie
+               folgenden den QR-Code.</p>
+
+            <p>Merci!</p>
+        </div>
+        <img src="qrcode.png" style="width: 160px; position: absolute; bottom:10px; right:20px;" />
+	</div>
+    <div style="visibility: hidden; display: none; width: 0; height: 0;">
+        <object type="application/oipfApplicationManager" id="oipfAppMan"> </object>
+        <object type="application/oipfConfiguration" id="oipfConfig"> </object>
+    </div>
+    <div id="debug"><h1>Debug</h1></div>
+    <div id="debug_login" style="display: none;">Please enter debug code: <div id="debug_code"></div></div>
+</body>
+</html>

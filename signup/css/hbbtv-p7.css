@@ -1,0 +1,18 @@
+/*
+ * Common CSS library for HbbTV site of ProSiebenSat.1 Digital
+ */
+
+body {
+    background: url("../img/p7_bg_1280x720.jpg") no-repeat scroll 0 0 #AEAEAE;
+    color: #5D5B65;
+}
+#buttonBar {
+    background-color: #AEAEAE;
+}
+a:focus, a:hover, a:active {
+    background-color:#FF0032;
+    color: #EDECEC;
+}
+a {
+    color: #5D5B65;
+}

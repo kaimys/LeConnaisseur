@@ -1,0 +1,142 @@
+/*
+ * Common CSS library for HbbTV site of ProSiebenSat.1 Digital
+ */
+
+body {
+    background-color: #000080;
+    color: #ffff00;
+    font-size: 18px;
+    font-family: sans-serif;
+}
+#screen {
+    position: absolute;
+    top: 35px;
+    left: 63px;
+    width: 1154px;
+    height: 650px;
+    overflow: visible;
+    z-index: 3;
+}
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+/* Debug layer */
+
+#debug {
+    position: absolute;
+    top: 65px;
+    left: 93px;
+    width: 600px;
+    height: 590px;
+    overflow: visible;
+    display: none;
+    opacity:0.8;
+    z-index: 5;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 14px;
+    font-family: monospace;
+}
+
+#debug p {
+	margin: 0px;
+}
+
+#debug_login {
+    position: absolute;
+    top: 360px;
+    left: 640px;
+    background: #0000ff;
+    color: #ffff00;
+}
+
+/* Button Bar */
+
+#buttonBar {
+    position: absolute;
+    top: 630px;
+    left: -63px;
+    width: 1280px;
+    height: 55px;
+    text-align: center;
+    background-color: #000080;
+    z-index: 4;
+}
+.button {
+    background: none no-repeat scroll 0 3px transparent;
+    font-size: 18px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 82px 0 8px;
+    padding-left: 30px;
+    text-transform: uppercase;
+}
+.button.red {
+    background-image: url("../img/button_red.png");
+}
+.button.green {
+    background-image: url("../img/button_green.png");
+}
+.button.yellow {
+    background-image: url("../img/button_yellow.png");
+}
+.button.blue {
+    background-image: url("../img/button_blue.png");
+}
+
+/* Highlight links if they are focused */
+
+a:focus, a:hover, a:active {
+    background-color:#800000;
+    color: #ffffff;
+}
+a {
+    color: #ffff00;
+    text-decoration: none;
+}
+
+/* Size and position of video container */
+
+#video {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+#video.fullscreen {
+    width: 100%;
+    height: 100%;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1000000;
+}
+#video-container-small {
+    position: absolute;
+    bottom: 50px;
+    right: 20px;
+    width: 300px;
+    height: 164px;
+}
+#video-container-big {
+    position: absolute;
+    top: 0;
+	left: 0;
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    z-index: 2;
+    display:none
+}
