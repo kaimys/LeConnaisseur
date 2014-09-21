@@ -76,27 +76,28 @@ function nowNext ($channel) {
 }
 
 function filter ($jsonString) {
-	$response = json_decode($jsonString);
+	$input = json_decode($jsonString);
 	
-	foreach ($response as $elem) {
+	foreach ($input as $elem) {
 		$elem = array(
 				"title" => $elem->asset->titles->deu,
 				"start" => $elem->asset->availabilityStartTime,
 				"end" => $elem->asset->availabilityEndTime,
 				"assetId" => $elem->asset->assetId,
 				"sourceId" => $elem->asset->sourceId,
+				"sourceName" => $elem->asset->sourceNames->long->deu,
 				"imageURL" => $elem->asset->imageUrl[0]);
-		$array[] = $elem;
+		$output[] = $elem;
 	}
 	
-	if (!isset($array)) {
-		$array = array();
+	if (!isset($output)) {
+		$output = array();
 	}
 	
 	if(true) {
-		return $array;
+		return $output;
 	} else {
-		return $response;
+		return $input;
 	}
 	
 }
