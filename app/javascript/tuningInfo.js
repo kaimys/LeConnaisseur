@@ -1,37 +1,62 @@
 var tuningInfo = {
-	DAS_ERSTE: {
+	'71': {
 		sourceName: 'Das Erste',
-		sourceID: '71',
 		onid: '1',
 		tsid: '1',
 		sid: '1'
 	},
-	PRO_7: {
+	'40': {
 		sourceName: 'ProSieben',
-		sourceID; '40',
 		onid: '1',
 		tsid: '1',
 		sid: '2'
 	},
-	ARTE: {
+	'58': {
 		sourceName: 'Arte',
-		sourceID: '58',
 		onid: '1',
 		tsid: '1',
 		sid: '3'
 	},
-	SIXX: {
+	'694': {
 		sourceName: 'Sixx',
-		sourceID: '694',
 		onid: '1',
 		tsid: '1',
 		sid: '4'
 	},
-	ZDF: {
+	'37': {
 		sourceName: 'ZDF',
-		sourceID: '37',
 		onid: '1',
 		tsid: '1',
 		sid: '5'
+	}
+};
+
+
+/**
+ * Example:
+ * 
+ * switchChannel(tuningInfo[sourceId]);
+ * 
+ * @param t
+ * @returns new channel object
+ */
+function switchChannel(t) {
+	if (vidObj) {
+		try {
+			c = vidObj.getChannelConfig().channelList
+					.getChannelByTriplet(t.onid, t.tsid, t.sid);
+		} catch (e) {
+			// TODO log error
+		}
+		try {
+			c = vidObj.createChannelObject(Channel.ID_DVB_C || 0,
+					t.onid, t.tsid, t.sid);
+		} catch (e) {
+			// TODO log error
+		}
+		if (c) {
+			vidObj.setChannel(c, true);
+			return c;
+		}
 	}
 }
