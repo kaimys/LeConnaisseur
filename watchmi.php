@@ -63,7 +63,7 @@ function condenseAsset($asset) {
         'sourceId' => $asset->sourceId,
         'sourceNameLong' => $asset->sourceNames->long->deu,
         'sourceNameShort' => $asset->sourceNames->short->deu,
-        'imageURL' => $asset->imageUrl[0]
+        'imageURL' => $asset->imageUrl[1]
     );
 }
 

@@ -86,7 +86,7 @@ function filter ($jsonString) {
 				"assetId" => $elem->asset->assetId,
 				"sourceId" => $elem->asset->sourceId,
 				"sourceName" => $elem->asset->sourceNames->long->deu,
-				"imageURL" => $elem->asset->imageUrl[0]);
+				"imageURL" => $elem->asset->imageUrl[1]);
 		$output[] = $elem;
 	}
 	
