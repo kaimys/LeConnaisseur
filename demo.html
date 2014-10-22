@@ -44,11 +44,11 @@
 			
 			document.addEventListener("keydown", function(e) {
 				switch (e.keyCode) {
-			        case KeyboardEvent.DOM_VK_LEFT:
+			        case KeyboardEvent.DOM_VK_LEFT, 37:
 		                e.preventDefault();
 						switchSlide(-1);
 						break;
-			        case KeyboardEvent.DOM_VK_RIGHT:
+			        case KeyboardEvent.DOM_VK_RIGHT, 39:
 		                e.preventDefault();
 						switchSlide(1);
 						break;
