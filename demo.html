@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Le Connaisseur Demo</title>
+
+		<style type="text/css">
+			body { margin: 0; padding: 0; }
+			#svg { width: 1280px; height: 720px; }
+		</style>
+		
+    </head>
+    <body>
+		<object id="svg" data="Screens.svg" type="image/svg+xml">
+
+		<script>
+			var svg = document.getElementById('svg');
+			var doc;
+			var layers = ['layer8', 'layer6', 'layer7', 'layer5', 'layer2', 'layer4', 'layer3'];
+			var currentLayer = 0;
+			
+			function switchSlide(slides) {
+				doc.getElementById(layers[currentLayer]).style.display = 'none';
+				currentLayer = (currentLayer + layers.length + slides) % layers.length;
+				doc.getElementById(layers[currentLayer]).style.display = 'block';
+				if(layers[currentLayer] == 'layer6') {
+					setTimeout(function() { switchSlide(1); }, 8000);
+				} else if(layers[currentLayer] == 'layer2') {
+					setTimeout(function() { switchSlide(1); }, 3000);
+				} else if(layers[currentLayer] == 'layer3') {
+					setTimeout(function() { switchSlide(3); }, 3000);
+				}			
+			}
+			
+			window.addEventListener("load", function(e) {
+				console.log('window loaded');
+				setTimeout(function() { switchSlide(1); }, 1000);
+			}, false);			
+
+			svg.addEventListener("load", function(e) {
+				console.log('svg loaded');
+				doc = svg.contentDocument;
+			}, false);
+			
+			document.addEventListener("keydown", function(e) {
+				switch (e.keyCode) {
+			        case KeyboardEvent.DOM_VK_LEFT:
+		                e.preventDefault();
+						switchSlide(-1);
+						break;
+			        case KeyboardEvent.DOM_VK_RIGHT:
+		                e.preventDefault();
+						switchSlide(1);
+						break;
+		        }
+			}, false);	
+			
+		</script>		
+    </body>
+</html>
