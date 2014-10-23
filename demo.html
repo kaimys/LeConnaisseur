@@ -3,12 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>Le Connaisseur Demo</title>
-
 		<style type="text/css">
 			body { margin: 0; padding: 0; }
 			#svg { width: 1280px; height: 720px; }
 		</style>
-		
+        <script type="text/javascript" src="StateMachine.js"></script>
     </head>
     <body>
 		<object id="svg" data="Screens.svg" type="image/svg+xml">
@@ -16,45 +15,226 @@
 		<script>
 			var svg = document.getElementById('svg');
 			var doc;
-			var layers = ['layer8', 'layer6', 'layer7', 'layer5', 'layer2', 'layer4', 'layer3'];
+			var layers = ['layer6', 'layer7', 'layer5', 'layer2', 'layer4', 'layer3'];
 			var currentLayer = 0;
-			
-			function switchSlide(slides) {
-				doc.getElementById(layers[currentLayer]).style.display = 'none';
-				currentLayer = (currentLayer + layers.length + slides) % layers.length;
-				doc.getElementById(layers[currentLayer]).style.display = 'block';
-				if(layers[currentLayer] == 'layer6') {
-					setTimeout(function() { switchSlide(1); }, 8000);
-				} else if(layers[currentLayer] == 'layer2') {
-					setTimeout(function() { switchSlide(1); }, 3000);
-				} else if(layers[currentLayer] == 'layer3') {
-					setTimeout(function() { switchSlide(3); }, 3000);
-				}			
-			}
-			
+            var KEYS = {
+                VK_LEFT    : 37,
+                VK_UP      : 38,
+                VK_RIGHT   : 39,
+                VK_DOWN    : 40,
+                VK_ENTER   : 13
+            };
+            var remote = {
+                onLeft: function() {},
+                onUp: function() {},
+                onRight: function() {},
+                onDown: function() {},
+                onEnter: function() {},
+                onRed: function() {},
+                onGreen: function() {},
+                onYellow: function() {},
+                onBlue: function() {},
+            };
+            var star_hilight = '#ffd42a';
+            var star_lolight = '#c5c5c5';
+            var stars = 3;
+
+            var state = createStateMachine({
+
+                'initialized': {
+                    prev: 'init'
+                },
+
+                'tv_on': {
+                    prev: 'initialized'
+                },
+
+                'bonjour': {
+                    prev: ['tv_on']
+                },
+
+                'hidden': {
+                    prev: ['bonjour', 'switching']
+                },
+
+                'rate': {
+                    prev: ['hidden']
+                },
+
+                'rated': {
+                    prev: ['rate']
+                },
+
+                'recommend': {
+                    prev: ['rated']
+                },
+
+                'switching': {
+                    prev: ['recommend']
+                }
+
+            });
+
+            state.onEnter('tv_on', function() {
+                console.log('tv_on');
+                setTimeout(function() {
+                    state.change('bonjour');
+                }, 1000);
+            });
+
+            state.onEnter('bonjour', function() {
+                console.log('bonjour');
+                doc.getElementById('layer6').style.display = 'block';
+                setTimeout(function() {
+                    state.change('hidden');
+                }, 5000);
+            });
+
+            state.onLeave('bonjour', function() {
+                doc.getElementById('layer6').style.display = 'none';
+            });
+
+            state.onEnter('hidden', function() {
+                console.log('hidden');
+                doc.getElementById('layer7').style.display = 'block';
+                setTimeout(function() {
+                    state.change('rate');
+                }, 10000);
+            });
+
+            state.onLeave('hidden', function() {
+                doc.getElementById('layer7').style.display = 'none';
+            });
+
+            state.onEnter('rate', function() {
+                console.log('rate');
+                stars = 3;
+                rate(0);
+                doc.getElementById('layer5').style.display = 'block';
+                doc.getElementById('stars').style.display = 'block';
+                doc.getElementById('remote').style.display = 'block';
+                remote.onLeft = function() { rate(-1); };
+                remote.onRight = function() { rate(+1); };
+                remote.onEnter = function() {
+                    state.change('rated');
+                };
+            });
+
+            state.onLeave('rate', function() {
+                doc.getElementById('layer5').style.display = 'none';
+                doc.getElementById('stars').style.display = 'none';
+                doc.getElementById('remote').style.display = 'none';
+                remote.onLeft = function() {};
+                remote.onRight = function() {};
+                remote.onEnter = function() {};
+            });
+
+            state.onEnter('rated', function() {
+                console.log('rated');
+                doc.getElementById('layer2').style.display = 'block';
+                doc.getElementById('stars').style.display = 'block';
+                setTimeout(function() {
+                    state.change('recommend');
+                }, 5000);
+            });
+
+            state.onLeave('rated', function() {
+                doc.getElementById('layer2').style.display = 'none';
+                doc.getElementById('stars').style.display = 'none';
+            });
+
+            state.onEnter('recommend', function() {
+                console.log('recommend');
+                doc.getElementById('layer4').style.display = 'block';
+                doc.getElementById('remote').style.display = 'block';
+                remote.onEnter = function() {
+                    state.change('switching');
+                };
+            });
+
+            state.onLeave('recommend', function() {
+                doc.getElementById('layer4').style.display = 'none';
+                doc.getElementById('remote').style.display = 'none';
+                remote.onEnter = function() {};
+            });
+
+            state.onEnter('switching', function() {
+                console.log('switching');
+                doc.getElementById('layer3').style.display = 'block';
+                setTimeout(function() {
+                    doc.getElementById('tvimage').setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'ratatouille.jpg');
+                    setTimeout(function() {
+                        state.change('hidden');
+                    }, 1000);
+                }, 1000);
+            });
+
+            state.onLeave('switching', function() {
+                doc.getElementById('layer3').style.display = 'none';
+            });
+
+            state.onError(function(err) {
+                console.log(err);
+            });
+
 			window.addEventListener("load", function(e) {
 				console.log('window loaded');
-				setTimeout(function() { switchSlide(1); }, 1000);
+				setTimeout(function() {
+                    state.change('tv_on');
+                }, 1000);
 			}, false);			
 
 			svg.addEventListener("load", function(e) {
 				console.log('svg loaded');
 				doc = svg.contentDocument;
+                doc.onRCKeyDown = onRCKeyDown;
 			}, false);
-			
+
 			document.addEventListener("keydown", function(e) {
 				switch (e.keyCode) {
-			        case KeyboardEvent.DOM_VK_LEFT, 37:
+			        case KEYS.VK_LEFT:
 		                e.preventDefault();
-						switchSlide(-1);
+                        remote.onLeft();
 						break;
-			        case KeyboardEvent.DOM_VK_RIGHT, 39:
+			        case KEYS.VK_RIGHT:
 		                e.preventDefault();
-						switchSlide(1);
+                        remote.onRight();
 						break;
 		        }
-			}, false);	
-			
-		</script>		
+			}, false);
+
+            function rate(offset) {
+                var i;
+                stars = Math.max(1, Math.min(5, stars + offset));
+                for(i = 1; i <= 5; i++) {
+                    if(i <= stars) {
+                        doc.getElementById('star' + i).style.fill = star_hilight;
+                    } else {
+                        doc.getElementById('star' + i).style.fill = star_lolight;
+                    }
+                }
+
+            }
+
+            function blink() {
+                doc.getElementById('led').style.display = 'none';
+                setTimeout(function() {
+                    doc.getElementById('led').style.display = 'block';
+                }, 500);
+            }
+
+            function onRCKeyDown(id) {
+                blink();
+                console.log('Remote: ' + id);
+                if(id == 'vk_left') {
+                    remote.onLeft();
+                } else if(id == 'vk_right') {
+                    remote.onRight();
+                } else if(id == 'vk_enter') {
+                    remote.onEnter();
+                }
+            }
+
+        </script>
     </body>
 </html>
